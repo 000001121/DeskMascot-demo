@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配達現場データ活用構想 — DeskMascot派生企画</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F7F4EC;
+    --paper-deep: #EFEAdd;
+    --ink: #232922;
+    --ink-soft: #4A5248;
+    --route: #24505C;
+    --route-light: #3A7284;
+    --stamp: #B34632;
+    --muted: #8C8672;
+    --line: #D8D0BC;
+    --highlight: #4F6B47;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Hexagon watermark pattern ===== */
+  .hexbg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+
+  .hex-divider {
+    position: relative;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hex-divider svg { opacity: 0.5; }
+
+  a { color: var(--route); }
+
+  /* ===== Layout shell ===== */
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    color: var(--route);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background: var(--route);
+    display: inline-block;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Shippori Mincho', serif;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+
+  p { color: var(--ink-soft); }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== Header / Hero ===== */
+  header.hero {
+    position: relative;
+    padding: 96px 0 72px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 46px);
+    line-height: 1.4;
+    margin-bottom: 26px;
+  }
+  .hero h1 .accent { color: var(--stamp); }
+
+  .hero-lede {
+    font-size: 17.5px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin-bottom: 40px;
+  }
+
+  .hero-stamp-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .stamp-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    padding: 7px 14px;
+    border: 1.4px solid var(--route);
+    border-radius: 3px;
+    color: var(--route);
+    letter-spacing: 0.03em;
+    transform: rotate(-1deg);
+  }
+  .stamp-pill.warn {
+    border-color: var(--stamp);
+    color: var(--stamp);
+    transform: rotate(1deg);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 44px;
+  }
+  .back-link:hover { color: var(--route); }
+
+  /* ===== Sections ===== */
+  section {
+    padding: 68px 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  section h2 {
+    font-size: clamp(24px, 4vw, 30px);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  section h3 {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    font-weight: 900;
+    font-size: 17px;
+    color: var(--route);
+    margin: 34px 0 12px;
+  }
+
+  section p + p { margin-top: 16px; }
+
+  .lead-q {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(20px, 3.4vw, 25px);
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 3px solid var(--stamp);
+    padding-left: 22px;
+    margin: 30px 0 34px;
+    line-height: 1.7;
+  }
+
+  /* ===== Two-track comparison ===== */
+  .track-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+  @media (max-width: 620px) {
+    .track-compare { grid-template-columns: 1fr; }
+  }
+  .track {
+    border: 1px solid var(--line);
+    background: var(--paper-deep);
+    padding: 24px 22px;
+    border-radius: 2px;
+  }
+  .track.gap {
+    border-color: var(--stamp);
+    background: #F9EEE9;
+  }
+  .track-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .track.gap .track-label { color: var(--stamp); }
+  .track-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .track-desc {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ===== Flow diagram (Phase 1) ===== */
+  .flow {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 18px;
+    position: relative;
+    padding-bottom: 30px;
+  }
+  .flow-step:last-child { padding-bottom: 0; }
+  .flow-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--paper);
+    background: var(--route);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-step::before {
+    content: "";
+    position: absolute;
+    left: 16.5px;
+    top: 34px;
+    bottom: 0;
+    width: 1.4px;
+    background: var(--line);
+  }
+  .flow-step:last-child::before { display: none; }
+  .flow-body h4 {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .flow-body p {
+    font-size: 14.5px;
+  }
+  .flow-tags {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .flow-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    padding: 3px 9px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--ink-soft);
+  }
+
+  /* status stamp pills — literal UI reference */
+  .status-row {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0 4px;
+    flex-wrap: wrap;
+  }
+  .status-stamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    padding: 6px 13px;
+    border-radius: 3px;
+    border: 1.6px solid;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .status-stamp.received { color: var(--highlight); border-color: var(--highlight); }
+  .status-stamp.absent { color: var(--stamp); border-color: var(--stamp); }
+  .status-stamp.other { color: var(--muted); border-color: var(--muted); }
+
+  /* ===== Hex cell visual ===== */
+  .hexcell-note {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 30px 0;
+    padding: 22px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 560px) {
+    .hexcell-note { flex-direction: column; }
+  }
+  .hexcell-note svg { flex-shrink: 0; }
+  .hexcell-note .note-text { font-size: 14.5px; color: var(--ink-soft); }
+  .hexcell-note .note-text strong { color: var(--ink); }
+
+  /* ===== Principle callout ===== */
+  .principle {
+    margin: 34px 0;
+    padding: 26px 26px;
+    border: 1.4px dashed var(--route);
+    position: relative;
+  }
+  .principle::before {
+    content: "設計原則";
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    background: var(--paper);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    color: var(--route);
+  }
+  .principle p { color: var(--ink); font-size: 15px; }
+  .principle .principle-sub {
+    margin-top: 10px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+
+  /* ===== Diff table ===== */
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    font-size: 14.5px;
+  }
+  .diff-table th, .diff-table td {
+    text-align: left;
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .diff-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .diff-table td.item {
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .diff-table td.new { color: var(--route); }
+
+  /* ===== Origin section ===== */
+  .origin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 30px 0;
+  }
+  @media (max-width: 620px) {
+    .origin-grid { grid-template-columns: 1fr; }
+  }
+  .origin-card h4 {
+    font-size: 14.5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--route);
+    margin-bottom: 10px;
+    letter-spacing: 0.03em;
+  }
+  .origin-card p { font-size: 14.5px; }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 60px 0 90px;
+    text-align: center;
+  }
+  footer .foot-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    line-height: 2;
+  }
+  footer a.repo-link {
+    display: inline-block;
+    margin-top: 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--route);
+    text-decoration: none;
+    border-bottom: 1px solid var(--route);
+    padding-bottom: 2px;
+  }
+
+  ::selection { background: var(--stamp); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="./index.html" class="back-link" style="margin-top:36px;">← DeskMascot に戻る</a>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-tag">Concept Note / 構想メモ — 2026.07</div>
+    <h1>バックオフィスは、<br>効率化されている。<br><span class="accent">現場は、まだだ。</span></h1>
+    <p class="hero-lede">
+      配達員が、ボタンひとつで「受け取ってもらえたか」を残す。
+      それだけの積み重ねが配達の未来を変える。
+      DeskMascot の技術（常駐オーバーレイ・簡易報告・プライバシー配慮の設計）を、
+      物流の現場にそのまま持ち込んだら何ができるか、を考えたメモです。
+    </p>
+    <div class="hero-stamp-row">
+      <span class="stamp-pill">CONCEPT / 未実装</span>
+      <span class="stamp-pill warn">現場データ × 予測</span>
+    </div>
+  </div>
+</header>
+
+<section id="issue">
+  <div class="wrap">
+    <div class="eyebrow">背景</div>
+    <h2>再配達は、「起きてから」対処されている</h2>
+    <p>
+      運送業界は、労働力不足と原価高騰、そして働き方改革による稼働時間の制約という、
+      三方向から同時に締め付けられている。限られた台数・人数で、
+      1台あたりの利益をどう上げるか——多くの物流DXは、この課題に対して
+      バックオフィス側の整備から着手している。
+      紙とExcelで散らばっていた情報を一元化するだけでも、大きな効率化になる。
+    </p>
+    <p>
+      ただ、それは「終わったことを、正確に記録・分析する」仕組みだ。
+      再配達という、現場で今まさに起きているロスそのものには、まだ手が届いていない。
+    </p>
+    <div class="lead-q">
+      本当に一番の危機は、管理画面の中ではなく、<br>ハンドルを握っている人の隣にある。
+    </div>
+    <p>
+      だから、着手するなら現場から。配達員が、運転の合間に、
+      画面を長く見ずに済む方法で、その場の実績を残せる仕組みがあれば——
+      それを積み重ねるだけで、「次はどう回るべきか」が見えてくるはずだ。
+    </p>
+  </div>
+</section>
+
+<div class="hex-divider">
+  <svg width="180" height="32" viewBox="0 0 180 32" fill="none">
+    <g stroke="#D8D0BC" stroke-width="1.2">
+      <polygon points="20,4 28,9 28,19 20,24 12,19 12,9" />
+      <polygon points="50,4 58,9 58,19 50,24 42,19 42,9" />
+      <polygon points="80,4 88,9 88,19 80,24 72,19 72,9" />
+      <polygon points="110,4 118,9 118,19 110,24 102,19 102,9" />
+      <polygon points="140,4 148,9 148,19 140,24 132,19 132,9" />
+      <polygon points="160,4 168,9 168,19 160,24 152,19 152,9" />
+    </g>
+  </svg>
+</div>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="eyebrow">着眼点</div>
+    <h2>「事後の可視化」と「その場の実績収集」は、別レイヤーの話</h2>
+    <div class="track-compare">
+      <div class="track">
+        <div class="track-label">既存のアプローチ</div>
+        <div class="track-title">バックオフィスの整備</div>
+        <div class="track-desc">
+          車両・ドライバー・運行・収支を一元管理し、経営状態を見える化する。
+          「終わった業務を、正しく振り返る」ための仕組み。
+        </div>
+      </div>
+      <div class="track gap">
+        <div class="track-label">手つかずの領域</div>
+        <div class="track-title">現場のリアルタイムデータ</div>
+        <div class="track-desc">
+          「今日、この時間帯、この届け先は在宅だったか」という一次情報は、
+          今のところドライバーの記憶と勘に依存している。
+        </div>
+      </div>
+    </div>
+    <p>
+      この一次情報を、負担なく、継続的に集める仕組みさえあれば、
+      「振り返り」の一歩先——「次はどう配ると良いか」の提案まで、届く。
+    </p>
+  </div>
+</section>
+
+<div class="hex-divider">
+  <svg width="180" height="32" viewBox="0 0 180 32" fill="none">
+    <g stroke="#D8D0BC" stroke-width="1.2">
+      <polygon points="20,4 28,9 28,19 20,24 12,19 12,9" />
+      <polygon points="50,4 58,9 58,19 50,24 42,19 42,9" />
+      <polygon points="80,4 88,9 88,19 80,24 72,19 72,9" />
+      <polygon points="110,4 118,9 118,19 110,24 102,19 102,9" />
+      <polygon points="140,4 148,9 148,19 140,24 132,19 132,9" />
+      <polygon points="160,4 168,9 168,19 160,24 152,19 152,9" />
+    </g>
+  </svg>
+</div>
+
+<section id="phase1">
+  <div class="wrap">
+    <div class="eyebrow">Phase 1 — 個人・小規模での実装</div>
+    <h2>配達番号ひとつで、報告は数秒で終わる</h2>
+    <p>
+      DeskMascot の「長押しメニュー」と「オーバーレイ常駐」の仕組みは、
+      そのまま配達報告の入口として転用できる。運転中でもアプリを開き直す手間がなく、
+      通知を受け取る導線もすでにある。
+    </p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>長押し →「配達報告」</h4>
+          <p>キャラを長押しして出るメニューに、配達報告の項目を追加するだけ。新しい操作を覚える必要がない。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>カメラでスキャン</h4>
+          <p>配達伝票・QRコードを読み取り、配達番号を取得する。</p>
+          <div class="flow-tags"><span class="flow-tag">配達番号をキーに逆引き</span></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h4>届け先・指定時間を自動取得</h4>
+          <p>配達番号をキーに、既存のデータベースから届け先住所と配達指定時間を引き当てる。入力の手間が発生しない。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body">
+          <h4>結果をワンタップで記録</h4>
+          <p>あらかじめ用意した定型ボタンを押すだけ。自由入力は、定型に当てはまらない例外のためだけに残す。</p>
+          <div class="status-row">
+            <span class="status-stamp received">受け取った</span>
+            <span class="status-stamp absent">不在だった</span>
+            <span class="status-stamp other">その他（自由入力）</span>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-body">
+          <h4>同じ配達番号で書き戻す</h4>
+          <p>結果を配達番号キーでデータベースに反映。取得と記録が同じキーで完結するため、突合の手間がない。</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>逆方向の連絡にも、同じ仕組みが使える</h3>
+    <p>
+      DeskMascot にはすでに、他アプリの通知が来るとキャラが吹き出しで知らせる機能がある。
+      これを音声読み上げに拡張すれば、配車担当からの「次の配達先が変更になりました」といった連絡を、
+      画面を見ずに、運転中のまま受け取れる。今は電話一本ごとに発生している、
+      配車側の手間と、ドライバー側の「路肩に停めて確認する」負担を、どちらも減らせる余地がある。
+    </p>
+
+    <h3>蓄積されると、何が変わるか</h3>
+    <p>
+      届け先ごと・時間帯区分ごとに「在宅率」が積み上がっていく。
+      これは統計というより、単純な集計に近い。ただ、それだけで
+      「この届け先には、18〜20時に回るのが再配達を防ぎやすい」という、
+      具体的な提案の材料になる。
+    </p>
+
+    <div class="principle">
+      <p>この規模（個人・小規模事業者単位）では、地理空間インデックス（H3など）は必要ない。</p>
+      <p class="principle-sub">配達番号という一意なキーで足りる場面に、複雑な仕組みを持ち込まない。まず、削ぎ落とした形で成立させる。</p>
+    </div>
+  </div>
+</section>
+
+<div class="hex-divider">
+  <svg width="180" height="32" viewBox="0 0 180 32" fill="none">
+    <g stroke="#D8D0BC" stroke-width="1.2">
+      <polygon points="20,4 28,9 28,19 20,24 12,19 12,9" />
+      <polygon points="50,4 58,9 58,19 50,24 42,19 42,9" />
+      <polygon points="80,4 88,9 88,19 80,24 72,19 72,9" />
+      <polygon points="110,4 118,9 118,19 110,24 102,19 102,9" />
+      <polygon points="140,4 148,9 148,19 140,24 132,19 132,9" />
+      <polygon points="160,4 168,9 168,19 160,24 152,19 152,9" />
+    </g>
+  </svg>
+</div>
+
+<section id="phase2">
+  <div class="wrap">
+    <div class="eyebrow">Phase 2 — 業界規模への拡張を見据えて</div>
+    <h2>共有すべきは、住所ではなく、セルIDだ</h2>
+    <p>
+      Phase 1 だけでも、一社の配達実績としては十分に機能する。
+      ただ、本当に効果が大きくなるのは、一社の中で閉じたときではなく、
+      複数の運送事業者の間でデータを重ね合わせられたときだと思う。
+      同じエリアを、別々の会社が、別々の時間帯に配達している。
+      その情報が業界で共有されれば、再配達の総量そのものを減らせる。
+    </p>
+    <p>
+      ただし、「この住所は、この時間、不在だった」という情報を
+      そのまま他社と共有することはできない。特定の家の生活パターンが分かってしまう、
+      れっきとした個人情報だからだ。
+    </p>
+
+    <div class="hexcell-note">
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+        <polygon points="36,6 58,19 58,45 36,58 14,45 14,19" stroke="#24505C" stroke-width="2" fill="#EFEAdd"/>
+        <text x="36" y="35" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#24505C" font-weight="700">H3</text>
+        <text x="36" y="46" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#8C8672">cell id</text>
+      </svg>
+      <div class="note-text">
+        <strong>粒度を落としてから共有する。</strong>
+        具体的な住所を、数百m四方の六角形セル（H3セルID）に変換してから統計化すれば、
+        「どの家が」ではなく「どのエリアの、どの時間帯が」という情報だけが残る。
+        個人を特定できる粒度を、共有の前段階で意図的に手放す設計。
+      </div>
+    </div>
+
+    <div class="principle">
+      <p>個人情報の共有ではなく、個人情報を含まない集計単位の共有にする。</p>
+      <p class="principle-sub">
+        DeskMascot のキャラ共有機能で採用した考え方——「取り込み時に消す」のではなく
+        「書き出し時にそもそも含めない」——と同じ設計原則を、ここでも踏襲している。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="hex-divider">
+  <svg width="180" height="32" viewBox="0 0 180 32" fill="none">
+    <g stroke="#D8D0BC" stroke-width="1.2">
+      <polygon points="20,4 28,9 28,19 20,24 12,19 12,9" />
+      <polygon points="50,4 58,9 58,19 50,24 42,19 42,9" />
+      <polygon points="80,4 88,9 88,19 80,24 72,19 72,9" />
+      <polygon points="110,4 118,9 118,19 110,24 102,19 102,9" />
+      <polygon points="140,4 148,9 148,19 140,24 132,19 132,9" />
+      <polygon points="160,4 168,9 168,19 160,24 152,19 152,9" />
+    </g>
+  </svg>
+</div>
+
+<section id="diff">
+  <div class="wrap">
+    <div class="eyebrow">位置づけ</div>
+    <h2>何と競合し、何を補うのか</h2>
+    <p>
+      これは、既存の運行管理・車両管理の仕組みを置き換えるものではない。
+      それらが得意とする「記録・請求・振り返り」の一歩先、
+      「今の一件を、次の一件に活かす」領域を補う位置づけになる。
+    </p>
+    <table class="diff-table">
+      <tr>
+        <th>観点</th>
+        <th>バックオフィスの仕組み</th>
+        <th>この構想</th>
+      </tr>
+      <tr>
+        <td class="item">扱う時点</td>
+        <td>運行後の記録・集計</td>
+        <td class="new">配達の瞬間・その場</td>
+      </tr>
+      <tr>
+        <td class="item">主な利用者</td>
+        <td>管理者・経営者</td>
+        <td class="new">配達員自身</td>
+      </tr>
+      <tr>
+        <td class="item">出力されるもの</td>
+        <td>収支・稼働の可視化</td>
+        <td class="new">次の配達ルート・時間帯の提案</td>
+      </tr>
+      <tr>
+        <td class="item">入力コスト</td>
+        <td>事務作業として発生</td>
+        <td class="new">運転動線の中で数秒</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<section id="origin">
+  <div class="wrap">
+    <div class="eyebrow">この構想の出どころ</div>
+    <h2>思いつきではなく、経験と技術の接続</h2>
+    <div class="origin-grid">
+      <div class="origin-card">
+        <h4>物流管理部での実務</h4>
+        <p>
+          在庫管理・需要予測・製造データ分析に携わった中で、
+          配車担当がドライバーと電話で連絡を取り合う現場も見てきた。
+          運転中は画面を見られない、電話には都度の手間がかかる——
+          その制約は、外から想像したものではない。
+        </p>
+      </div>
+      <div class="origin-card">
+        <h4>DeskMascot で検証済みの技術</h4>
+        <p>
+          常駐オーバーレイ、長押しメニュー、通知の吹き出し表示、
+          そして「書き出し時に個人情報を含めない」プライバシー設計。
+          これらはすべて、個人開発のキャラクターアプリの中で、
+          実際に動くところまで作り込んだ実績がある。
+        </p>
+      </div>
+    </div>
+    <p>
+      現場の制約を知っていることと、それを動く仕組みに落とす技術を持っていること。
+      この2つが揃って初めて、絵に描いた餅ではない構想になると考えている。
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-note">
+      CONCEPT NOTE — 未実装の構想メモです。<br>
+      Phase 1 相当の技術検証は、DeskMascot のリポジトリで継続予定。
+    </div>
+    <a class="repo-link" href="https://github.com/000001121/DeskMascot-demo" target="_blank" rel="noopener">→ DeskMascot-demo (GitHub)</a>
+  </div>
+</footer>
+
+</body>
+</html>
