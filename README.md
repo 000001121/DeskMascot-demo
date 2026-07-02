@@ -16,7 +16,7 @@ Formsなら定型ボタンを増やすのもノーコード！<br>
 DeskMascot の技術（オーバーレイ・通知連携・プライバシー配慮の設計）を、
 物流の配達現場に応用したらどうなるか、を考えた構想メモです。
 
-→ [配達現場データ活用構想](./logistics.html)
+→ [配達現場データ活用構想](https://000001121.github.io/DeskMascot-demo/logistics.html)
 
 ## デモ
 
