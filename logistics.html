@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>配達現場データ活用構想 — DeskMascot派生企画</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --paper: #F7F4EC;
@@ -24,7 +24,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-family: 'Shippori Mincho', serif;
   line-height: 1.85;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -56,7 +56,7 @@ a { color: var(--route); }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12.5px;
   letter-spacing: 0.14em;
   color: var(--route);
@@ -77,7 +77,7 @@ h1, h2, h3 {
   letter-spacing: 0.01em;
 }
 p { color: var(--ink-soft); }
-.mono { font-family: 'JetBrains Mono', monospace; }
+.mono { font-family: 'Shippori Mincho', serif; }
 header.hero {
   position: relative;
   padding: 96px 0 72px;
@@ -85,7 +85,7 @@ header.hero {
   overflow: hidden;
 }
 .hero-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12px;
   letter-spacing: 0.18em;
   color: var(--muted);
@@ -106,7 +106,7 @@ header.hero {
 }
 .hero-stamp-row { display: flex; flex-wrap: wrap; gap: 12px; }
 .stamp-pill {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12.5px;
   padding: 7px 14px;
   border: 1.4px solid var(--route);
@@ -120,7 +120,7 @@ header.hero {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12.5px;
   color: var(--muted);
   text-decoration: none;
@@ -130,7 +130,7 @@ header.hero {
 section { padding: 68px 0; border-bottom: 1px solid var(--line); position: relative; }
 section h2 { font-size: clamp(24px, 4vw, 30px); margin-bottom: 28px; line-height: 1.5; }
 section h3 {
-  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-family: 'Shippori Mincho', serif;
   font-weight: 900;
   font-size: 17px;
   color: var(--route);
@@ -157,7 +157,7 @@ section p + p { margin-top: 16px; }
 .track { border: 1px solid var(--line); background: var(--paper-deep); padding: 24px 22px; border-radius: 2px; }
 .track.gap { border-color: var(--stamp); background: #F9EEE9; }
 .track-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 11.5px;
   letter-spacing: 0.1em;
   color: var(--muted);
@@ -171,7 +171,7 @@ section p + p { margin-top: 16px; }
 .flow-step { display: grid; grid-template-columns: 34px 1fr; gap: 18px; position: relative; padding-bottom: 30px; }
 .flow-step:last-child { padding-bottom: 0; }
 .flow-num {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--paper);
@@ -199,7 +199,7 @@ section p + p { margin-top: 16px; }
 .flow-body p { font-size: 14.5px; }
 .flow-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .flow-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 11.5px;
   padding: 3px 9px;
   background: var(--paper-deep);
@@ -209,7 +209,7 @@ section p + p { margin-top: 16px; }
 }
 .status-row { display: flex; gap: 10px; margin: 14px 0 4px; flex-wrap: wrap; }
 .status-stamp {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12.5px;
   padding: 6px 13px;
   border-radius: 3px;
@@ -246,7 +246,7 @@ section p + p { margin-top: 16px; }
   left: 20px;
   background: var(--paper);
   padding: 0 10px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 11.5px;
   letter-spacing: 0.1em;
   color: var(--route);
@@ -256,7 +256,7 @@ section p + p { margin-top: 16px; }
 .diff-table { width: 100%; border-collapse: collapse; margin: 30px 0; font-size: 14.5px; }
 .diff-table th, .diff-table td { text-align: left; padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .diff-table th {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 11.5px;
   letter-spacing: 0.06em;
   color: var(--muted);
@@ -269,7 +269,7 @@ section p + p { margin-top: 16px; }
 @media (max-width: 620px) { .origin-grid { grid-template-columns: 1fr; } }
 .origin-card h4 {
   font-size: 14.5px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   color: var(--route);
   margin-bottom: 10px;
   letter-spacing: 0.03em;
@@ -277,7 +277,7 @@ section p + p { margin-top: 16px; }
 .origin-card p { font-size: 14.5px; }
 footer { padding: 60px 0 90px; text-align: center; }
 footer .foot-note {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 12.5px;
   color: var(--muted);
   letter-spacing: 0.04em;
@@ -286,7 +286,7 @@ footer .foot-note {
 footer a.repo-link {
   display: inline-block;
   margin-top: 22px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Shippori Mincho', serif;
   font-size: 13px;
   color: var(--route);
   text-decoration: none;
@@ -506,8 +506,8 @@ Phase 1 だけでも、一社の配達実績としては十分に機能する。
 <div class="hexcell-note">
 <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
 <polygon points="36,6 58,19 58,45 36,58 14,45 14,19" stroke="#24505C" stroke-width="2" fill="#EFEAdd"/>
-<text x="36" y="35" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="#24505C" font-weight="700">H3</text>
-<text x="36" y="46" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#8C8672">cell id</text>
+<text x="36" y="35" text-anchor="middle" font-family="Shippori Mincho, serif" font-size="9" fill="#24505C" font-weight="700">H3</text>
+<text x="36" y="46" text-anchor="middle" font-family="Shippori Mincho, serif" font-size="7" fill="#8C8672">cell id</text>
 </svg>
 <div class="note-text">
 <strong>粒度を落としてから共有する。</strong>
