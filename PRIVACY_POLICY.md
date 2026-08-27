@@ -1,6 +1,6 @@
 # DeskMascot プライバシーポリシー
 
-制定日: 2026年7月吉日
+制定日: 2026年8月27日
 運営者: KAMO LABS
 
 KAMO LABS(以下「当方」)は、Androidアプリ「DeskMascot」(以下「本アプリ」)における、
@@ -113,7 +113,8 @@ ChatGPT API を利用するための API キーを、設定画面から入力し
 
 ## 7. お問い合わせ
 
-本ポリシーに関するお問い合わせは、以下のリポジトリの Issues にてご連絡ください。
+本ポリシーに関するお問い合わせは、以下のお問い合わせフォームよりご連絡ください。
 
 KAMO LABS
-https://github.com/000001121/DeskMascot-demo/issues
+お問い合わせフォーム: https://docs.google.com/forms/d/1sC_TyD_1kDJwz7exzeB3qecZwQnxGqX_e4khp2p0TnE/viewform
+ウェブサイト: https://sites.google.com/view/kamo-labs
